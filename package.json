@@ -1,0 +1,29 @@
+{
+  "name": "basics.web",
+  "version": "0.1.0",
+  "description": "",
+  "author": "Alvin Chan <no@email.com>",
+  "license": "ISC",
+  "main": "src",
+  "lint-staged": {
+    "*.{ts,js,json}": ["prettier --no-semi --single-quote --write", "git add"],
+    "*.css": ["prettier --write", "git add"]
+  },
+  "devDependencies": {
+    "astrum": "^1.9.5",
+    "css-loader": "^0.28.4",
+    "husky": "^0.14.3",
+    "lint-staged": "^4.0.3",
+    "prettier": "^1.5.3",
+    "style-loader": "^0.18.2",
+    "ts-loader": "^2.3.2",
+    "typescript": "^2.4.2",
+    "webpack": "^3.5.4",
+    "webpack-dev-server": "^2.7.1"
+  },
+  "scripts": {
+    "start": "webpack-dev-server",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "precommit": "lint-staged"
+  }
+}

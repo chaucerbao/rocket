@@ -1,0 +1,13 @@
+.sticky-example {
+  height: 150vh;
+}
+
+.sticky-example__bar {
+  background: slategray;
+  color: white;
+  padding: 20px;
+}
+
+.sticky-example__bar[data-sticky-stuck] {
+  top: 0;
+}

@@ -1,0 +1,15 @@
+{
+  "compilerOptions": {
+    "outDir": "dist/",
+    "target": "es5",
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "lib": ["es2015", "dom"],
+    "strict": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "declaration": true,
+    "sourceMap": true
+  },
+  "include": ["src/**/*.ts"]
+}
