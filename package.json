@@ -1,7 +1,7 @@
 {
-  "name": "basics.web",
+  "name": "rocket",
   "version": "0.1.0",
-  "description": "",
+  "description": "A pattern library to get your website up and running quickly",
   "author": "Alvin Chan <no@email.com>",
   "license": "ISC",
   "main": "src",
