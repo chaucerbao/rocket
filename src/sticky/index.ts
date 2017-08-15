@@ -14,7 +14,16 @@ export default () => {
 
     const startSticky = scrollAction(
       (progress: number) => {
-        if (progress > 0 && !stickyElement.hasAttribute(stuckAttribute)) {
+        if (progress === 0 && stickyElement.hasAttribute(stuckAttribute)) {
+          stickyElement.removeAttribute(stuckAttribute)
+
+          stickyElement.style.width = null
+          placeholder.style.width = null
+          placeholder.style.height = null
+        } else if (
+          progress > 0 &&
+          !stickyElement.hasAttribute(stuckAttribute)
+        ) {
           stickyElement.style.width = window.getComputedStyle(
             stickyElement
           ).width
@@ -24,15 +33,6 @@ export default () => {
           placeholder.style.height = `${stickyRect.height}px`
 
           stickyElement.setAttribute(stuckAttribute, '')
-        } else if (
-          progress <= 0 &&
-          stickyElement.hasAttribute(stuckAttribute)
-        ) {
-          stickyElement.removeAttribute(stuckAttribute)
-
-          stickyElement.style.width = null
-          placeholder.style.width = null
-          placeholder.style.height = null
         }
 
         return true
