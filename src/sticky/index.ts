@@ -1,4 +1,4 @@
-import { $$ } from '../lib/selector'
+import { $$ } from '../lib/dom'
 import each from '../lib/each'
 import scrollAction from '../lib/scroll-action'
 
