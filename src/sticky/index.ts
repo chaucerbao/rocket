@@ -3,13 +3,12 @@ import each from '../lib/each'
 import scrollAction from '../lib/scroll-action'
 
 const stuckAttribute = 'data-sticky-stuck'
-const placeholderAttribute = 'data-sticky-placeholder'
 
 export default () => {
   each($$('[data-sticky]'), (stickyElement: HTMLElement) => {
     // Create a placeholder around the sticky element
     const placeholder = document.createElement('div')
-    placeholder.setAttribute(placeholderAttribute, '')
+    placeholder.setAttribute('data-sticky-placeholder', '')
     stickyElement.insertAdjacentElement('beforebegin', placeholder)
     placeholder.appendChild(stickyElement)
 
