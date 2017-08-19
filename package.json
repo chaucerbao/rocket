@@ -10,6 +10,7 @@
     "*.css": ["prettier --write", "git add"]
   },
   "devDependencies": {
+    "@types/riot": "^3.6.0",
     "astrum": "^1.9.5",
     "css-loader": "^0.28.4",
     "husky": "^0.14.3",
@@ -25,5 +26,8 @@
     "start": "webpack-dev-server",
     "test": "echo \"Error: no test specified\" && exit 1",
     "precommit": "lint-staged"
+  },
+  "dependencies": {
+    "riot": "^3.6.2"
   }
 }
