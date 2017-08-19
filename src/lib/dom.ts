@@ -1,3 +1,7 @@
+export interface Attributes {
+  [key: string]: string
+}
+
 export const $ = (target: string, context?: Element) =>
   (context || document).querySelector(target)
 
@@ -17,4 +21,29 @@ export const parent = (
   }
 
   return undefined
+}
+
+export const createElement = (
+  tag: HTMLElement | string,
+  classNames: string[] = [],
+  attributes: Attributes = {}
+) => {
+  const element = tag instanceof HTMLElement ? tag : document.createElement(tag)
+
+  classNames.forEach(className => {
+    element.classList.add(className)
+  })
+
+  Object.keys(attributes).forEach(key => {
+    element.setAttribute(key, attributes[key])
+  })
+
+  return element
+}
+
+export const wrapElement = (wrapper: HTMLElement, element: HTMLElement) => {
+  element.insertAdjacentElement('beforebegin', wrapper)
+  wrapper.appendChild(element)
+
+  return wrapper
 }

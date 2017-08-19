@@ -1,47 +1,44 @@
-import { $$ } from '../lib/dom'
-import each from '../lib/each'
+import { createElement, wrapElement } from '../lib/dom'
 import scrollAction from '../lib/scroll-action'
 
+export interface Options {
+  element: HTMLElement
+}
+
 const stuckAttribute = 'data-sticky-stuck'
+const placeholderAttribute = 'data-sticky-placeholder'
 
-export default () => {
-  each($$('[data-sticky]'), (stickyElement: HTMLElement) => {
-    // Create a placeholder around the sticky element
-    const placeholder = document.createElement('div')
-    placeholder.setAttribute('data-sticky-placeholder', '')
-    stickyElement.insertAdjacentElement('beforebegin', placeholder)
-    placeholder.appendChild(stickyElement)
+export default ({ element }: Options) => {
+  const placeholder = createElement('div', [], { [placeholderAttribute]: '' })
 
-    const startSticky = scrollAction(
-      (progress: number) => {
-        if (progress === 0 && stickyElement.hasAttribute(stuckAttribute)) {
-          stickyElement.removeAttribute(stuckAttribute)
+  wrapElement(placeholder, element)
 
-          stickyElement.style.width = null
-          placeholder.style.width = null
-          placeholder.style.height = null
-        } else if (
-          progress > 0 &&
-          !stickyElement.hasAttribute(stuckAttribute)
-        ) {
-          stickyElement.style.width = window.getComputedStyle(
-            stickyElement
-          ).width
+  const startSticky = scrollAction(
+    (progress: number) => {
+      if (progress === 0 && element.hasAttribute(stuckAttribute)) {
+        element.removeAttribute(stuckAttribute)
 
-          const stickyRect = stickyElement.getBoundingClientRect()
-          placeholder.style.width = `${stickyRect.width}px`
-          placeholder.style.height = `${stickyRect.height}px`
+        element.style.width = null
+        placeholder.style.width = null
+        placeholder.style.height = null
+      } else if (progress > 0 && !element.hasAttribute(stuckAttribute)) {
+        element.style.width = window.getComputedStyle(element).width
 
-          stickyElement.setAttribute(stuckAttribute, '')
-        }
+        const stickyRect = element.getBoundingClientRect()
+        placeholder.style.width = `${stickyRect.width}px`
+        placeholder.style.height = `${stickyRect.height}px`
 
-        return true
-      },
-      {
-        start: window.pageYOffset + stickyElement.getBoundingClientRect().top
+        element.setAttribute(stuckAttribute, '')
       }
-    )
 
-    startSticky()
-  })
+      return true
+    },
+    {
+      start: window.pageYOffset + element.getBoundingClientRect().top
+    }
+  )
+
+  return {
+    frameID: startSticky()
+  }
 }
