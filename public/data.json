@@ -31,7 +31,7 @@
   },
   "assets": {
     "css": [],
-    "js": ["components/basic.js"]
+    "js": ["components/rocket.js"]
   },
   "font_libraries": {
     "typekit_code": null,
