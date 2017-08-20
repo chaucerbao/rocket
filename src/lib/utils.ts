@@ -1,4 +1,4 @@
-export default <T>(
+export const each = <T>(
   items: T[] | NodeListOf<Element>,
   callback: (item: T, i: number) => any,
   scope?: any
@@ -10,4 +10,8 @@ export default <T>(
   }
 
   return results
+}
+
+export const resolve = <T>(value: T | (() => T)) => {
+  return value instanceof Function ? value() : value
 }
