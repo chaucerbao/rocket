@@ -12,6 +12,7 @@ export const each = <T>(
   return results
 }
 
-export const resolve = <T>(value: T | (() => T)) => {
-  return value instanceof Function ? value() : value
-}
+export type Resolvable<T> = T | (() => T)
+
+export const resolve = <T>(value: Resolvable<T>) =>
+  value instanceof Function ? value() : value
