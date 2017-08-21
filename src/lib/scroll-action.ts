@@ -1,35 +1,26 @@
+import { resolve, Resolvable } from './utils'
+
 export interface Options {
-  start?: number
-  end?: number
-  viewport?: number | 'top' | 'middle' | 'bottom'
+  start?: Resolvable<number>
+  end?: Resolvable<number>
+  viewport?: Resolvable<number>
 }
 
 export default (
   callback: (progress: number) => boolean,
-  { start = 0, end = document.body.clientHeight, viewport = 0 }: Options = {}
+  {
+    start = 0,
+    end = () => document.body.clientHeight,
+    viewport = 0
+  }: Options = {}
 ) => {
-  const total = end - start
-
   const calculateFrame = () => {
-    let viewportOffset
+    const startY = resolve(start)
+    const total = resolve(end) - startY
 
-    if (typeof viewport == 'number') {
-      viewportOffset = viewport
-    } else {
-      switch (viewport) {
-        case 'bottom':
-          viewportOffset = window.innerHeight
-          break
-        case 'middle':
-          viewportOffset = window.innerHeight * 0.5
-          break
-        default:
-          viewportOffset = 0
-      }
-    }
+    const viewportY = resolve(viewport)
+    const current = window.pageYOffset + viewportY - startY
 
-    const trigger = window.pageYOffset + viewportOffset
-    const current = trigger - start
     const progress = Math.min(Math.max(current / total, 0), 1)
 
     if (callback(progress)) {
