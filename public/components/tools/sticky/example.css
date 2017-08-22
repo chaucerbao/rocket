@@ -1,14 +1,14 @@
 .sticky-example {
-  height: 50vh;
-  margin-bottom: 75vh;
   position: relative;
+  margin-bottom: 75vh;
   background: gainsboro;
+  height: 50vh;
 }
 
 .sticky-example__bar {
   background: slategray;
-  color: white;
   padding: 20px;
+  color: white;
 }
 
 .sticky-example__bar[data-sticky-stuck] {

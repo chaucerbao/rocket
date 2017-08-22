@@ -5,9 +5,12 @@
   "author": "Alvin Chan <no@email.com>",
   "license": "ISC",
   "main": "src",
+  "stylelint": {
+    "extends": ["stylelint-config-concentric-order"]
+  },
   "lint-staged": {
     "*.{ts,js,json}": ["prettier --no-semi --single-quote --write", "git add"],
-    "*.css": ["prettier --write", "git add"]
+    "*.css": ["stylelint --fix", "prettier --write", "git add"]
   },
   "devDependencies": {
     "@types/riot": "^3.6.0",
@@ -17,17 +20,19 @@
     "lint-staged": "^4.0.3",
     "prettier": "^1.5.3",
     "style-loader": "^0.18.2",
+    "stylelint": "^8.0.0",
+    "stylelint-config-concentric-order": "^2.1.2",
     "ts-loader": "^2.3.2",
     "typescript": "^2.4.2",
     "webpack": "^3.5.4",
     "webpack-dev-server": "^2.7.1"
   },
+  "dependencies": {
+    "riot": "^3.6.2"
+  },
   "scripts": {
     "start": "webpack-dev-server",
     "test": "echo \"Error: no test specified\" && exit 1",
     "precommit": "lint-staged"
-  },
-  "dependencies": {
-    "riot": "^3.6.2"
   }
 }
