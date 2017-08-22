@@ -9,6 +9,7 @@ export interface Options extends ScrollActionOptions {
 }
 
 const stuckAttribute = 'data-sticky-stuck'
+const endAttribute = 'data-sticky-end'
 const placeholderAttribute = 'data-sticky-placeholder'
 
 export default (options: Options) => {
@@ -39,6 +40,14 @@ export default (options: Options) => {
         element.setAttribute(stuckAttribute, '')
 
         module.trigger('stick', element)
+      } else if (progress < 1 && element.hasAttribute(endAttribute)) {
+        element.removeAttribute(endAttribute)
+
+        module.trigger('restick', element)
+      } else if (progress === 1 && !element.hasAttribute(endAttribute)) {
+        element.setAttribute(endAttribute, '')
+
+        module.trigger('end', element)
       }
 
       return true

@@ -1,5 +1,8 @@
 .sticky-example {
-  height: 150vh;
+  height: 50vh;
+  margin-bottom: 75vh;
+  position: relative;
+  background: gainsboro;
 }
 
 .sticky-example__bar {
@@ -10,4 +13,10 @@
 
 .sticky-example__bar[data-sticky-stuck] {
   top: 0;
+}
+
+.sticky-example__bar[data-sticky-end] {
+  position: absolute;
+  top: initial;
+  bottom: 0;
 }
