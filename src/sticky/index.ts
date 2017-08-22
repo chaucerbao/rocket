@@ -1,17 +1,18 @@
 import { observable, Observable } from 'riot'
 import { createElement, wrapElement } from '../lib/dom'
-import { Resolvable } from '../lib/utils'
-import scrollAction from '../lib/scroll-action'
+import scrollAction, {
+  Options as ScrollActionOptions
+} from '../lib/scroll-action'
 
-export interface Options {
+export interface Options extends ScrollActionOptions {
   element: HTMLElement
-  viewport?: Resolvable<number>
 }
 
 const stuckAttribute = 'data-sticky-stuck'
 const placeholderAttribute = 'data-sticky-placeholder'
 
-export default ({ element, viewport = 0 }: Options) => {
+export default (options: Options) => {
+  const { element } = options
   const module: Observable = observable({ element })
 
   const placeholder = createElement('div', [], { [placeholderAttribute]: '' })
@@ -42,10 +43,12 @@ export default ({ element, viewport = 0 }: Options) => {
 
       return true
     },
-    {
-      start: window.pageYOffset + element.getBoundingClientRect().top,
-      viewport
-    }
+    Object.assign(
+      {
+        start: window.pageYOffset + element.getBoundingClientRect().top
+      },
+      options
+    )
   )()
 
   return module
