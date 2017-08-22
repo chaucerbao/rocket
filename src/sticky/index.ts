@@ -45,7 +45,8 @@ export default (options: Options) => {
     },
     Object.assign(
       {
-        start: window.pageYOffset + element.getBoundingClientRect().top
+        start: () =>
+          window.pageYOffset + placeholder.getBoundingClientRect().top
       },
       options
     )
