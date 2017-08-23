@@ -58,6 +58,11 @@
           "group": "tools",
           "name": "sticky",
           "title": "Sticky"
+        },
+        {
+          "name": "lazy-loader",
+          "title": "Lazy Loader",
+          "group": "tools"
         }
       ]
     }
