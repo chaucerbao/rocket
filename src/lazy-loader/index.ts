@@ -7,10 +7,11 @@ import scrollAction, {
 
 export interface Options extends ScrollActionOptions {}
 
+const lazyAttribute = 'data-src'
 const loadedAttribute = 'data-lazy-loaded'
 
 export default (options: Options) => {
-  const elements = $$(`[data-src]:not([${loadedAttribute}])`)
+  const elements = $$(`[${lazyAttribute}]:not([${loadedAttribute}])`)
   const module: Observable = observable({ elements })
 
   each(elements, (element: HTMLElement) => {
@@ -19,7 +20,9 @@ export default (options: Options) => {
     scrollAction(
       (progress: number) => {
         if (progress > 0 && !element.hasAttribute(loadedAttribute)) {
-          element.setAttribute('src', element.getAttribute('data-src')!)
+          element.setAttribute('src', element.getAttribute(lazyAttribute)!)
+          element.removeAttribute(lazyAttribute)
+
           element.setAttribute(loadedAttribute, '')
 
           module.trigger('change', element)
