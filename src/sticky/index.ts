@@ -1,12 +1,11 @@
 import { observable, Observable } from 'riot'
 import { createElement, wrapElement } from '../lib/dom'
-import { resolveElement, ResolvableElement } from '../lib/utils'
 import scrollAction, {
   Options as ScrollActionOptions
 } from '../lib/scroll-action'
 
 export interface Options extends ScrollActionOptions {
-  element: ResolvableElement
+  element: HTMLElement
 }
 
 const stuckAttribute = 'data-sticky-stuck'
@@ -14,11 +13,10 @@ const endAttribute = 'data-sticky-end'
 const placeholderAttribute = 'data-sticky-placeholder'
 
 export default (options: Options) => {
-  const element = resolveElement(options.element)
+  const { element } = options
   const module: Observable = observable({ element })
 
   const placeholder = createElement('div', [], { [placeholderAttribute]: '' })
-
   wrapElement(placeholder, element)
 
   scrollAction(
@@ -32,9 +30,10 @@ export default (options: Options) => {
 
         module.trigger('unstick', element)
       } else if (progress > 0 && !element.hasAttribute(stuckAttribute)) {
-        element.style.width = window.getComputedStyle(element).width
-
+        const elementStyle = getComputedStyle(element)
         const stickyRect = element.getBoundingClientRect()
+
+        element.style.width = elementStyle.width
         placeholder.style.width = `${stickyRect.width}px`
         placeholder.style.height = `${stickyRect.height}px`
 
