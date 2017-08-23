@@ -1,3 +1,5 @@
+import { resolveElement, ResolvableElement } from './utils'
+
 export interface Attributes {
   [key: string]: string
 }
@@ -41,9 +43,15 @@ export const createElement = (
   return element
 }
 
-export const wrapElement = (wrapper: HTMLElement, element: HTMLElement) => {
-  element.insertAdjacentElement('beforebegin', wrapper)
-  wrapper.appendChild(element)
+export const wrapElement = (
+  wrapper: ResolvableElement,
+  element: ResolvableElement
+) => {
+  const resolvedWrapper = resolveElement(wrapper)
+  const resolvedElement = resolveElement(element)
+
+  resolvedElement.insertAdjacentElement('beforebegin', resolvedWrapper)
+  resolvedWrapper.appendChild(resolvedElement)
 
   return wrapper
 }

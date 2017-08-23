@@ -1,11 +1,12 @@
 import { observable, Observable } from 'riot'
 import { createElement, wrapElement } from '../lib/dom'
+import { resolveElement, ResolvableElement } from '../lib/utils'
 import scrollAction, {
   Options as ScrollActionOptions
 } from '../lib/scroll-action'
 
 export interface Options extends ScrollActionOptions {
-  element: HTMLElement
+  element: ResolvableElement
 }
 
 const stuckAttribute = 'data-sticky-stuck'
@@ -13,7 +14,7 @@ const endAttribute = 'data-sticky-end'
 const placeholderAttribute = 'data-sticky-placeholder'
 
 export default (options: Options) => {
-  const { element } = options
+  const element = resolveElement(options.element)
   const module: Observable = observable({ element })
 
   const placeholder = createElement('div', [], { [placeholderAttribute]: '' })
