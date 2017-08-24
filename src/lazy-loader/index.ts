@@ -5,13 +5,16 @@ import scrollAction, {
   Options as ScrollActionOptions
 } from '../lib/scroll-action'
 
-export interface Options extends ScrollActionOptions {}
+export interface Options extends ScrollActionOptions {
+  context?: HTMLElement
+}
 
 const lazyAttribute = 'data-src'
 const loadedAttribute = 'data-lazy-loaded'
 
-export default (options: Options) => {
-  const elements = $$(`[${lazyAttribute}]:not([${loadedAttribute}])`)
+export default (options: Options = { context: undefined }) => {
+  const { context } = options
+  const elements = $$(`[${lazyAttribute}]:not([${loadedAttribute}])`, context)
   const module: Observable = observable({ elements })
 
   each(elements, (element: HTMLElement) => {
