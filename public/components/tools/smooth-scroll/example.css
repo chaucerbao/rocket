@@ -1,0 +1,8 @@
+.scroll-example__target {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 5vh 0;
+  background: gainsboro;
+  height: 5vh;
+}

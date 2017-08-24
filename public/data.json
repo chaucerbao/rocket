@@ -56,6 +56,11 @@
       "components": [
         {
           "group": "tools",
+          "name": "smooth-scroll",
+          "title": "Smooth Scroll"
+        },
+        {
+          "group": "tools",
           "name": "sticky",
           "title": "Sticky"
         },
