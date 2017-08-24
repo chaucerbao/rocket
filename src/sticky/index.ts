@@ -30,7 +30,7 @@ export default (options: Options) => {
 
         module.trigger('unstick', element)
       } else if (progress > 0 && !element.hasAttribute(stuckAttribute)) {
-        const elementStyle = getComputedStyle(element)
+        const elementStyle = window.getComputedStyle(element)
         const stickyRect = element.getBoundingClientRect()
 
         element.style.width = elementStyle.width

@@ -20,7 +20,7 @@ export default (
     const progress = Math.min(Math.max(current / total, 0), 1)
 
     if (callback(progress)) {
-      requestAnimationFrame(calculateFrame)
+      window.requestAnimationFrame(calculateFrame)
     }
   }
 
