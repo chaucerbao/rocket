@@ -1,0 +1,16 @@
+[data-carousel] {
+  overflow: hidden;
+}
+
+[data-carousel-slider] {
+  display: flex;
+  transition: transform .4s;
+}
+
+[data-carousel-slider-transition] {
+  transition-property: none;
+}
+
+[data-carousel-slide] {
+  flex: 0 1 100%;
+}
