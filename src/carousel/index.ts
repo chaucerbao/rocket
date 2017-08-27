@@ -53,9 +53,10 @@ export default (options: Options) => {
   slider.addEventListener('transitionend', () => (isTransitioning = false))
 
   const transitionTo = (i: number, shouldWait = false) => {
-    isTransitioning = shouldWait && i !== slideIndex
-    slider.style.transform = `translateX(${-i * 100 / slideCount}%)`
-    slideIndex = i
+    const targetIndex = Math.min(Math.max(i, 0), slideCount - 1)
+    isTransitioning = shouldWait && targetIndex !== slideIndex
+    slider.style.transform = `translateX(${-targetIndex * 100 / slideCount}%)`
+    slideIndex = targetIndex
   }
 
   const wrapAround = () => {
