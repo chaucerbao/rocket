@@ -5,9 +5,10 @@
 [data-carousel-slider] {
   display: flex;
   transition: transform .4s;
+  height: 100%;
 }
 
-[data-carousel-slider-transition] {
+[data-carousel-slider-jump] {
   transition-property: none;
 }
 

@@ -4,43 +4,93 @@ import { each } from '../lib/utils'
 
 export interface Options {
   element: HTMLElement
+  infinite?: boolean
 }
 
 const carouselAttribute = 'data-carousel'
 const sliderAttribute = 'data-carousel-slider'
 const slideAttribute = 'data-carousel-slide'
-const transitionAttribute = 'data-carousel-slider-transition'
+const jumpAttribute = 'data-carousel-slider-jump'
 
-export default (options: Options) => {
-  const module: Observable = observable()
-  const { element: carousel } = options
+const scaffold = (element: HTMLElement, options: Options) => {
   const slides: HTMLElement[] = []
-  const slideCount = carousel.children.length
-  let slideIndex = 0
 
-  each(carousel.children, (slide: HTMLElement) => {
+  each(element.children, (slide: HTMLElement) => {
     slide.setAttribute(slideAttribute, '')
     slides.push(slide)
   })
 
+  if (options.infinite) {
+    slides.unshift(slides[slides.length - 1].cloneNode(true) as HTMLElement)
+    slides.push(slides[1].cloneNode(true) as HTMLElement)
+  }
+
   const slider = createElement('div', [], { [sliderAttribute]: '' })
+  const slideCount = slides.length
+
   slider.style.width = `${slideCount * 100}%`
+  slides.forEach(slide => slider.appendChild(slide))
 
-  while (carousel.firstChild) {
-    slider.appendChild(carousel.firstChild)
+  element.appendChild(slider)
+  element.setAttribute(carouselAttribute, '')
+
+  return {
+    element,
+    slider,
+    slides
   }
-  carousel.appendChild(slider)
-  carousel.setAttribute(carouselAttribute, '')
+}
 
-  // Controls
-  const goTo = (i: number) => {
-    slideIndex = (i % slideCount + slideCount) % slideCount
+export default (options: Options) => {
+  const module: Observable = observable()
+  const { element, infinite = false } = options
+
+  const { slider, slides } = scaffold(element, options)
+  const slideCount = slides.length
+  let slideIndex = infinite ? 1 : 0
+
+  let isTransitioning = false
+  slider.addEventListener('transitionend', () => (isTransitioning = false))
+
+  const transitionTo = (i: number) => {
+    isTransitioning = true
+    slider.style.transform = `translateX(${-i * 100 / slideCount}%)`
+  }
+
+  const wrapAround = () => {
+    slider.removeEventListener('transitionend', wrapAround)
+
+    slider.setAttribute(jumpAttribute, '')
+    if (slideIndex === 0) {
+      slideIndex = slideCount - 2
+    } else if (slideIndex === slideCount - 1) {
+      slideIndex = 1
+    }
     slider.style.transform = `translateX(${-slideIndex * 100 / slideCount}%)`
-
-    module.trigger('slide', slideIndex)
+    window.requestAnimationFrame(() => slider.removeAttribute(jumpAttribute))
   }
-  const previous = () => goTo(slideIndex - 1)
-  const next = () => goTo(slideIndex + 1)
+
+  const goTo = (i: number) => {
+    if (isTransitioning) return
+    slideIndex = infinite ? i + 1 : i
+    transitionTo(slideIndex)
+  }
+
+  const previous = () => {
+    if (isTransitioning) return
+    transitionTo(--slideIndex)
+    if (infinite && slideIndex === 0) {
+      slider.addEventListener('transitionend', wrapAround)
+    }
+  }
+
+  const next = () => {
+    if (isTransitioning) return
+    transitionTo(++slideIndex)
+    if (infinite && slideIndex === slideCount - 1) {
+      slider.addEventListener('transitionend', wrapAround)
+    }
+  }
 
   // Touch controls
   let touchStartX: number | undefined
@@ -56,7 +106,7 @@ export default (options: Options) => {
   }
 
   slider.addEventListener('touchstart', e => {
-    slider.setAttribute(transitionAttribute, '')
+    slider.setAttribute(jumpAttribute, '')
     touchStartX = touchMoveX = e.targetTouches[0].clientX
     touchMove()
   })
@@ -65,9 +115,9 @@ export default (options: Options) => {
   })
   slider.addEventListener('touchend', () => {
     if (touchStartX && touchMoveX) {
-      const threshold = carousel.getBoundingClientRect().width * 0.35
+      const threshold = element.getBoundingClientRect().width * 0.35
 
-      slider.removeAttribute(transitionAttribute)
+      slider.removeAttribute(jumpAttribute)
       if (touchMoveX - touchStartX > threshold) {
         previous()
       } else if (touchStartX - touchMoveX > threshold) {
@@ -79,6 +129,10 @@ export default (options: Options) => {
 
     touchStartX = touchMoveX = undefined
   })
+
+  slider.style.transform = `translateX(${-(infinite ? 1 : 0) *
+    100 /
+    slideCount}%)`
 
   return Object.assign(module, {
     slideIndex,
