@@ -52,9 +52,10 @@ export default (options: Options) => {
   let isTransitioning = false
   slider.addEventListener('transitionend', () => (isTransitioning = false))
 
-  const transitionTo = (i: number) => {
-    isTransitioning = true
+  const transitionTo = (i: number, shouldWait = false) => {
+    isTransitioning = shouldWait && i !== slideIndex
     slider.style.transform = `translateX(${-i * 100 / slideCount}%)`
+    slideIndex = i
   }
 
   const wrapAround = () => {
@@ -66,19 +67,18 @@ export default (options: Options) => {
     } else if (slideIndex === slideCount - 1) {
       slideIndex = 1
     }
-    slider.style.transform = `translateX(${-slideIndex * 100 / slideCount}%)`
+    transitionTo(slideIndex)
     window.requestAnimationFrame(() => slider.removeAttribute(jumpAttribute))
   }
 
   const goTo = (i: number) => {
     if (isTransitioning) return
-    slideIndex = infinite ? i + 1 : i
-    transitionTo(slideIndex)
+    transitionTo(infinite ? i + 1 : i, true)
   }
 
   const previous = () => {
     if (isTransitioning) return
-    transitionTo(--slideIndex)
+    transitionTo(slideIndex - 1, true)
     if (infinite && slideIndex === 0) {
       slider.addEventListener('transitionend', wrapAround)
     }
@@ -86,7 +86,7 @@ export default (options: Options) => {
 
   const next = () => {
     if (isTransitioning) return
-    transitionTo(++slideIndex)
+    transitionTo(slideIndex + 1, true)
     if (infinite && slideIndex === slideCount - 1) {
       slider.addEventListener('transitionend', wrapAround)
     }
@@ -123,16 +123,14 @@ export default (options: Options) => {
       } else if (touchStartX - touchMoveX > threshold) {
         next()
       } else {
-        goTo(slideIndex)
+        goTo(infinite ? slideIndex - 1 : slideIndex)
       }
     }
 
     touchStartX = touchMoveX = undefined
   })
 
-  slider.style.transform = `translateX(${-(infinite ? 1 : 0) *
-    100 /
-    slideCount}%)`
+  transitionTo(infinite ? 1 : 0)
 
   return Object.assign(module, {
     slideIndex,
