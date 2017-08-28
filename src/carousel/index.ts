@@ -50,7 +50,10 @@ export default (options: Options) => {
   let slideIndex = infinite ? 1 : 0
 
   let isTransitioning = false
-  slider.addEventListener('transitionend', () => (isTransitioning = false))
+  slider.addEventListener('transitionend', () => {
+    isTransitioning = false
+    window.requestAnimationFrame(() => module.trigger('slide', slideIndex))
+  })
 
   const transitionTo = (i: number, shouldWait = false) => {
     const targetIndex = Math.min(Math.max(i, 0), slideCount - 1)
@@ -110,6 +113,8 @@ export default (options: Options) => {
     slider.setAttribute(jumpAttribute, '')
     touchStartX = touchMoveX = e.targetTouches[0].clientX
     touchMove()
+
+    module.trigger('touchstart')
   })
   slider.addEventListener('touchmove', e => {
     touchMoveX = e.targetTouches[0].clientX
@@ -129,6 +134,8 @@ export default (options: Options) => {
     }
 
     touchStartX = touchMoveX = undefined
+
+    module.trigger('touchend')
   })
 
   transitionTo(infinite ? 1 : 0)

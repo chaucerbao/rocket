@@ -23,3 +23,5 @@ $('.carousel-example__next-button').addEventListener('click', () =>
 )
 
 carouselHandler.on('slide', i => console.log('Slide', i))
+carouselHandler.on('touchstart', i => console.log('Touch Start'))
+carouselHandler.on('touchend', i => console.log('Touch End'))
