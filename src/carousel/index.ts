@@ -109,6 +109,7 @@ export default (options: Options) => {
   }
 
   slider.addEventListener('touchstart', e => {
+    if (isTransitioning) return
     slider.setAttribute(jumpAttribute, '')
     touchStartX = touchMoveX = e.targetTouches[0].clientX
     touchMove()
