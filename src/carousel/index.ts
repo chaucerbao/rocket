@@ -75,7 +75,8 @@ export default (options: Options) => {
 
   const transitionTo = (i: number, shouldWait = false) => {
     const targetIndex = Math.min(Math.max(i, 0), slideCount - 1)
-    isTransitioning = shouldWait && targetIndex !== slideIndex
+    isTransitioning =
+      (shouldWait && targetIndex !== slideIndex) || !!touchStartX
     slider.style.transform = `translateX(${-targetIndex * 100 / slideCount}%)`
     slideIndex = targetIndex
   }
