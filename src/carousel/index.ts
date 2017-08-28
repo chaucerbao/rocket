@@ -52,7 +52,9 @@ export default (options: Options) => {
   let isTransitioning = false
   slider.addEventListener('transitionend', () => {
     isTransitioning = false
-    window.requestAnimationFrame(() => module.trigger('slide', slideIndex))
+    window.requestAnimationFrame(() =>
+      module.trigger('slide', infinite ? slideIndex - 1 : slideIndex)
+    )
   })
 
   const transitionTo = (i: number, shouldWait = false) => {
