@@ -48,13 +48,29 @@ export default (options: Options) => {
   const { slider, slides } = scaffold(element, options)
   const slideCount = slides.length
   let slideIndex = infinite ? 1 : 0
-
   let isTransitioning = false
+
   slider.addEventListener('transitionend', () => {
     isTransitioning = false
-    window.requestAnimationFrame(() =>
+
+    if (infinite) {
+      if (slideIndex === 0) {
+        slideIndex = slideCount - 2
+      } else if (slideIndex === slideCount - 1) {
+        slideIndex = 1
+      }
+
+      slider.setAttribute(jumpAttribute, '')
+      transitionTo(slideIndex)
+    }
+
+    window.requestAnimationFrame(() => {
+      if (slider.hasAttribute(jumpAttribute)) {
+        slider.removeAttribute(jumpAttribute)
+      }
+
       module.trigger('slide', infinite ? slideIndex - 1 : slideIndex)
-    )
+    })
   })
 
   const transitionTo = (i: number, shouldWait = false) => {
@@ -62,19 +78,6 @@ export default (options: Options) => {
     isTransitioning = shouldWait && targetIndex !== slideIndex
     slider.style.transform = `translateX(${-targetIndex * 100 / slideCount}%)`
     slideIndex = targetIndex
-  }
-
-  const wrapAround = () => {
-    slider.removeEventListener('transitionend', wrapAround)
-
-    slider.setAttribute(jumpAttribute, '')
-    if (slideIndex === 0) {
-      slideIndex = slideCount - 2
-    } else if (slideIndex === slideCount - 1) {
-      slideIndex = 1
-    }
-    transitionTo(slideIndex)
-    window.requestAnimationFrame(() => slider.removeAttribute(jumpAttribute))
   }
 
   const goTo = (i: number) => {
@@ -85,17 +88,11 @@ export default (options: Options) => {
   const previous = () => {
     if (isTransitioning) return
     transitionTo(slideIndex - 1, true)
-    if (infinite && slideIndex === 0) {
-      slider.addEventListener('transitionend', wrapAround)
-    }
   }
 
   const next = () => {
     if (isTransitioning) return
     transitionTo(slideIndex + 1, true)
-    if (infinite && slideIndex === slideCount - 1) {
-      slider.addEventListener('transitionend', wrapAround)
-    }
   }
 
   // Touch controls
@@ -140,7 +137,7 @@ export default (options: Options) => {
     module.trigger('touchend')
   })
 
-  transitionTo(infinite ? 1 : 0)
+  transitionTo(slideIndex)
 
   return Object.assign(module, {
     slideIndex,
