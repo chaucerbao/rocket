@@ -1,8 +1,8 @@
 // Library
-import lazyLoader from '../../../../src/lazy-loader'
+import lazyTrigger from '../../../../src/lazy-trigger'
 
 // Example
-const lazyHandler = lazyLoader({
+const lazyHandler = lazyTrigger({
   viewport: () => window.innerHeight * 0.75
 })
 

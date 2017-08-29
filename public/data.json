@@ -70,8 +70,8 @@
           "title": "Sticky"
         },
         {
-          "name": "lazy-loader",
-          "title": "Lazy Loader",
+          "name": "lazy-trigger",
+          "title": "Lazy Trigger",
           "group": "tools"
         }
       ]
