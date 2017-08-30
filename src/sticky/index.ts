@@ -4,16 +4,11 @@ import scrollAction, {
   Options as ScrollActionOptions
 } from '../lib/scroll-action'
 
-export interface Options extends ScrollActionOptions {
-  element: HTMLElement
-}
-
 const stuckAttribute = 'data-sticky-stuck'
 const endAttribute = 'data-sticky-end'
 const placeholderAttribute = 'data-sticky-placeholder'
 
-export default (options: Options) => {
-  const { element } = options
+export default (element: HTMLElement, options: ScrollActionOptions) => {
   const module: Observable = observable({ element })
 
   const placeholder = createElement('div', [], { [placeholderAttribute]: '' })

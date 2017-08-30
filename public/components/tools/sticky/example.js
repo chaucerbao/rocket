@@ -3,13 +3,13 @@ import sticky from '../../../../src/sticky'
 import '../../../../src/sticky/style.css'
 
 // Example
+import { $ } from '../../../../src/lib/dom'
 import './example.css'
 
-const stickyElement = document.querySelector('[data-sticky]')
+const stickyElement = $('[data-sticky]')
 const container = stickyElement.parentElement
 
-const stickyHandler = sticky({
-  element: stickyElement,
+const stickyHandler = sticky(stickyElement, {
   end: () => {
     const containerRect = container.getBoundingClientRect()
 
