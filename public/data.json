@@ -61,6 +61,11 @@
         },
         {
           "group": "tools",
+          "name": "modal",
+          "title": "Modal"
+        },
+        {
+          "group": "tools",
           "name": "smooth-scroll",
           "title": "Smooth Scroll"
         },
