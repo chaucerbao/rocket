@@ -6,23 +6,30 @@ import '../../../../src/modal/style.css'
 import { $ } from '../../../../src/lib/dom'
 import './example.css'
 
-const modalHandler = modal()
+const modalOneHandler = modal($('#modal-1'))
+modalOneHandler.on('open', () => console.log('Opened'))
+modalOneHandler.on('close', () => console.log('Closed'))
 
-$('#example-modal__trigger-one').addEventListener('click', e => {
+$('#modal-1__trigger').addEventListener('click', e => {
   e.preventDefault()
-  modalHandler.open('example-modal__one')
+  modalOneHandler.open()
 })
 
-$('#example-modal__trigger-two').addEventListener('click', e => {
+$('#modal-1__close').addEventListener('click', e => {
   e.preventDefault()
-  modalHandler.open('example-modal__two')
+  modalOneHandler.close()
 })
 
-$('.example-modal__close').addEventListener('click', e => {
+const modalTwoHandler = modal($('#modal-2'))
+modalTwoHandler.on('open', () => console.log('Opened'))
+modalTwoHandler.on('close', () => console.log('Closed'))
+
+$('#modal-2__trigger').addEventListener('click', e => {
   e.preventDefault()
-  modalHandler.close()
+  modalTwoHandler.open()
 })
 
-modalHandler.on('open', () => console.log('Opened'))
-modalHandler.on('close', () => console.log('Closed'))
-modalHandler.on('load', () => console.log('Load!'))
+$('#modal-2__close').addEventListener('click', e => {
+  e.preventDefault()
+  modalTwoHandler.close()
+})

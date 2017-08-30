@@ -1,8 +1,4 @@
-[data-modal-freeze] {
-  overflow: hidden;
-}
-
-[data-modal-layer] {
+[data-modal] {
   position: fixed;
   top: 0;
   right: 0;
