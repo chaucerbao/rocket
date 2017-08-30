@@ -7,8 +7,7 @@ import { $, $$ } from '../../../../src/lib/dom'
 import { each } from '../../../../src/lib/utils'
 import './example.css'
 
-const carouselHandler = carousel({
-  element: document.querySelector('[data-carousel]'),
+const carouselHandler = carousel($('[data-carousel]'), {
   infinite: true
 })
 

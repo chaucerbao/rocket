@@ -41,9 +41,9 @@ const scaffold = (element: HTMLElement, options: Options) => {
   }
 }
 
-export default (options: Options) => {
+export default (element: HTMLElement, options: Options) => {
   const module: Observable = observable()
-  const { element, infinite = false } = options
+  const { infinite = false } = options
 
   const { slider, slides } = scaffold(element, options)
   const slideCount = slides.length
@@ -117,9 +117,11 @@ export default (options: Options) => {
 
     module.trigger('touchstart')
   })
+
   slider.addEventListener('touchmove', e => {
     touchMoveX = e.targetTouches[0].clientX
   })
+
   slider.addEventListener('touchend', () => {
     if (touchStartX && touchMoveX) {
       const threshold = element.getBoundingClientRect().width * 0.35
@@ -142,7 +144,6 @@ export default (options: Options) => {
   transitionTo(slideIndex)
 
   return Object.assign(module, {
-    slideIndex,
     goTo,
     previous,
     next
