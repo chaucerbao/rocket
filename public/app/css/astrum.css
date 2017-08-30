@@ -35,8 +35,8 @@
 .ndpl-page,
 .ndpl-nav__title,
 .ndpl-sidebar__title {
-  font-family: 'Open Sans', 'Trebuchet MS', 'Lucida Grande',
-    'Lucida Sans Unicode', 'Lucida Sans', Tahoma, sans-serif;
+  font-family: "Open Sans", "Trebuchet MS", "Lucida Grande",
+    "Lucida Sans Unicode", "Lucida Sans", Tahoma, sans-serif;
 }
 
 /* Heading type sizes */
@@ -289,7 +289,7 @@
  * ----------------------------------------//
  */
 .ndpl-loading__title {
-  transition: opacity .5s ease;
+  transition: opacity 0.5s ease;
   opacity: 0;
   margin: 0 24px 24px;
   color: #303637;
@@ -300,7 +300,7 @@
 }
 
 .ndpl-container {
-  transition: opacity .5s ease .5s;
+  transition: opacity 0.5s ease 0.5s;
   opacity: 0;
 }
 .ndpl-container.loaded {
@@ -313,7 +313,7 @@
 .ndpl-loading {
   position: fixed;
   left: -9999px;
-  transition: opacity .5s ease;
+  transition: opacity 0.5s ease;
   opacity: 0;
   padding: 96px 0;
   width: 100%;
@@ -414,7 +414,7 @@
   height: 100%;
   -webkit-animation: ndpl-foldCubeAngle 2.4s infinite linear both;
   animation: ndpl-foldCubeAngle 2.4s infinite linear both;
-  content: '';
+  content: "";
 }
 .ndpl-folding-cube .ndpl-cube2 {
   -webkit-transform: scale(1.1) rotateZ(90deg);
@@ -556,7 +556,7 @@
   overflow-y: auto;
 }
 .ndpl-mobile .ndpl-sidebar {
-  transition: left .5s ease;
+  transition: left 0.5s ease;
 }
 .ndpl-sidebar.open {
   left: 0;
@@ -723,7 +723,7 @@
   top: 50%;
   right: 24px;
   transform: rotate(90deg);
-  transition: transform .25s ease;
+  transition: transform 0.25s ease;
   margin-top: -4px;
   background: transparent
     url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI5IiBoZWlnaHQ9IjE1IiB2aWV3Qm94PSIwIDAgOSAxNSI+CiAgPGRlZnM+CiAgICA8c3R5bGU+CiAgICAgIC5jbH MtMSB7CiAgICAgICAgZmlsbDogIzIzMWYyMDsKICAgICAgICBmaWxsLXJ1bGU6IGV2ZW5vZGQ7CiAgICAgIH0KICAgIDwvc3R5bGU+CiAgPC9kZWZzPgogIDxwYXRoIGNsYXNzPSJjbHMtMSIgZD0iTTQ2MC40NDgsNDkxLjAwOUw0NjgsNDk4LjVsLTcuNTQ4LDcuNDkyTDQ1OSw1MDQuNTU3bDYuMS02LjA1NS02LjEtNi4wNTdaIiB0cmFuc2Zvcm09InRyYW5zbGF0ZSgtNDU5IC00OTEpIi8+Cjwvc3ZnPgo=")
@@ -776,7 +776,7 @@
   top: 15px;
   right: 0;
   transform: rotate(0deg);
-  transition: .5s ease-in-out;
+  transition: 0.5s ease-in-out;
   z-index: 9999;
   cursor: pointer;
   width: 48px;
@@ -794,7 +794,7 @@
   position: absolute;
   right: 12px;
   transform: rotate(0deg);
-  transition: .25s ease-in-out;
+  transition: 0.25s ease-in-out;
   opacity: 1;
   background-color: #303637;
   width: 27px;

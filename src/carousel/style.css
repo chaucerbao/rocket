@@ -4,7 +4,7 @@
 
 [data-carousel-slider] {
   display: flex;
-  transition: transform .4s;
+  transition: transform 0.4s;
   height: 100%;
 }
 
