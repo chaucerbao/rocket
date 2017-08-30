@@ -5,11 +5,23 @@
   "author": "Alvin Chan <no@email.com>",
   "license": "ISC",
   "main": "src",
+  "prettier": {
+    "semi": false,
+    "singleQuote": true,
+    "overrides": [
+      {
+        "files": "*.css",
+        "options": {
+          "singleQuote": false
+        }
+      }
+    ]
+  },
   "stylelint": {
     "extends": ["stylelint-config-concentric-order"]
   },
   "lint-staged": {
-    "*.{ts,js,json}": ["prettier --no-semi --single-quote --write", "git add"],
+    "*.{ts,js,json}": ["prettier --write", "git add"],
     "*.css": ["stylelint --fix", "prettier --write", "git add"]
   },
   "devDependencies": {
