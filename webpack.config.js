@@ -1,7 +1,7 @@
 const path = require('path')
 
 const config = {
-  entry: path.resolve('public', 'components', 'rocket.ts'),
+  entry: path.resolve('public', 'components', 'rocket.js'),
   output: {
     filename: 'rocket.js',
     path: path.resolve('public', 'components')
