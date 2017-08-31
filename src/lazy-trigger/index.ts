@@ -1,51 +1,40 @@
 import { observable, Observable } from 'riot'
-import { $$ } from '../lib/dom'
-import { each } from '../lib/utils'
 import scrollAction, {
   Options as ScrollActionOptions
 } from '../lib/scroll-action'
 
-export interface Options extends ScrollActionOptions {
-  context?: HTMLElement
-}
-
 const lazyAttribute = 'data-lazy'
 const loadedAttribute = 'data-lazy-loaded'
 
-export default (options: Options = { context: undefined }) => {
-  const { context } = options
-  const elements = $$(`[${lazyAttribute}]`, context)
-  const module: Observable = observable({ elements })
+export default (element: HTMLElement, options: ScrollActionOptions) => {
+  const module: Observable = observable()
+  const lazyValue = element.getAttribute(lazyAttribute)
 
-  each(elements, (element: HTMLElement) => {
-    element.addEventListener('load', () => module.trigger('load', element))
+  element.addEventListener('load', () =>
+    module.trigger('load', element, lazyValue)
+  )
 
-    scrollAction(
-      (progress: number) => {
-        if (progress > 0) {
-          module.trigger(
-            'trigger',
-            element,
-            element.getAttribute(lazyAttribute)
-          )
+  scrollAction(
+    (progress: number) => {
+      if (progress > 0) {
+        module.trigger('trigger', element, lazyValue)
 
-          element.removeAttribute(lazyAttribute)
-          element.setAttribute(loadedAttribute, '')
+        element.removeAttribute(lazyAttribute)
+        element.setAttribute(loadedAttribute, '')
 
-          return false
-        }
+        return false
+      }
 
-        return true
+      return true
+    },
+    Object.assign(
+      {
+        start: () => window.pageYOffset + element.getBoundingClientRect().top,
+        viewport: () => window.innerHeight
       },
-      Object.assign(
-        {
-          start: () => window.pageYOffset + element.getBoundingClientRect().top,
-          viewport: () => window.innerHeight
-        },
-        options
-      )
-    )()
-  })
+      options
+    )
+  )()
 
   return module
 }
