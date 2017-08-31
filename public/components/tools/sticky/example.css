@@ -12,7 +12,13 @@
 }
 
 .sticky-example__bar[data-sticky-stuck] {
-  top: 0;
+  top: 56px;
+}
+
+@media (min-width: 960px) {
+  .sticky-example__bar[data-sticky-stuck] {
+    top: 0;
+  }
 }
 
 .sticky-example__bar[data-sticky-end] {

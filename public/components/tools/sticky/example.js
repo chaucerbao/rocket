@@ -8,6 +8,7 @@ import './example.css'
 
 const stickyElement = $('[data-sticky]')
 const container = stickyElement.parentElement
+const header = $('.ndpl-header')
 
 const stickyHandler = sticky(stickyElement, {
   end: () => {
@@ -19,7 +20,9 @@ const stickyHandler = sticky(stickyElement, {
       containerRect.height -
       stickyElement.getBoundingClientRect().height
     )
-  }
+  },
+  viewport: () =>
+    window.innerWidth < 960 ? header.getBoundingClientRect().height : 0
 })
 
 stickyHandler.on('stick', () => console.log('Stuck'))
