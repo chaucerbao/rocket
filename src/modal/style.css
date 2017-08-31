@@ -10,3 +10,7 @@
 [data-modal-open] {
   visibility: visible;
 }
+
+[data-modal-freeze] {
+  overflow: hidden;
+}
