@@ -39,14 +39,27 @@ export interface Cache {
   [key: string]: any
 }
 
-export const memoize = (callback: () => any) => {
+export interface MemoizeOptions {
+  limit?: number
+}
+
+export const memoize = (
+  callback: () => any,
+  { limit = 0 }: MemoizeOptions = {}
+) => {
   const cache: Cache = {}
+  const stack: string[] = []
 
   return (...args: any[]) => {
     const key = JSON.stringify(args)
 
     if (!cache.hasOwnProperty(key)) {
       cache[key] = callback(...args)
+      stack.push(key)
+
+      if (stack.length && stack.length > limit) {
+        delete cache[stack.shift()!]
+      }
     }
 
     return cache[key]
