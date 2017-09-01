@@ -34,3 +34,21 @@ export const resolveElement = (value: ResolvableElement) => {
 
   return element
 }
+
+export interface Cache {
+  [key: string]: any
+}
+
+export const memoize = (callback: () => any) => {
+  const cache: Cache = {}
+
+  return (...args: any[]) => {
+    const key = JSON.stringify(args)
+
+    if (!cache.hasOwnProperty(key)) {
+      cache[key] = callback(...args)
+    }
+
+    return cache[key]
+  }
+}
