@@ -75,8 +75,7 @@ export default (element: HTMLElement, options: Options) => {
 
   const transitionTo = (i: number, shouldWait = false) => {
     const targetIndex = Math.min(Math.max(i, 0), slideCount - 1)
-    isTransitioning =
-      (shouldWait && targetIndex !== slideIndex) || !!touchTargetStart
+    isTransitioning = (shouldWait && targetIndex !== slideIndex) || !!touchStart
     slider.style.transform = `translateX(${-targetIndex * 100 / slideCount}%)`
     slideIndex = targetIndex
   }
@@ -97,37 +96,38 @@ export default (element: HTMLElement, options: Options) => {
   }
 
   // Touch controls
-  let touchTargetStart: Touch | undefined
-  let touchTargetMove: Touch | undefined
+  let touchStart: Touch | undefined
+  let touchMove: Touch | undefined
 
-  const touchMove = () => {
-    if (touchTargetStart && touchTargetMove) {
+  const moveSlider = () => {
+    if (touchStart && touchMove) {
       slider.style.transform = `translateX(${-slideIndex *
         100 /
-        slideCount}%) translateX(${touchTargetMove.clientX -
-        touchTargetStart.clientX}px)`
+        slideCount}%) translateX(${touchMove.clientX - touchStart.clientX}px)`
 
-      window.requestAnimationFrame(touchMove)
+      window.requestAnimationFrame(moveSlider)
     }
   }
 
   slider.addEventListener('touchstart', e => {
     if (isTransitioning) return
+
+    touchStart = touchMove = e.targetTouches[0]
+
     slider.setAttribute(jumpAttribute, '')
-    touchTargetStart = touchTargetMove = e.targetTouches[0]
-    touchMove()
+    moveSlider()
 
     module.trigger('touchstart')
   })
 
   slider.addEventListener('touchmove', e => {
-    touchTargetMove = e.targetTouches[0]
+    touchMove = e.targetTouches[0]
   })
 
   slider.addEventListener('touchend', () => {
-    if (touchTargetStart && touchTargetMove) {
-      const touchMoveX = touchTargetMove.clientX
-      const touchStartX = touchTargetStart.clientX
+    if (touchStart && touchMove) {
+      const touchMoveX = touchMove.clientX
+      const touchStartX = touchStart.clientX
       const threshold = element.getBoundingClientRect().width * 0.3
 
       slider.removeAttribute(jumpAttribute)
@@ -140,7 +140,7 @@ export default (element: HTMLElement, options: Options) => {
       }
     }
 
-    touchTargetStart = touchTargetMove = undefined
+    touchStart = touchMove = undefined
 
     module.trigger('touchend')
   })
