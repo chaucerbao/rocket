@@ -106,6 +106,7 @@ export default (element: HTMLElement, options: Options) => {
         100 /
         slideCount}%) translateX(${touchTargetMove.clientX -
         touchTargetStart.clientX}px)`
+
       window.requestAnimationFrame(touchMove)
     }
   }
@@ -127,7 +128,7 @@ export default (element: HTMLElement, options: Options) => {
     if (touchTargetStart && touchTargetMove) {
       const touchMoveX = touchTargetMove.clientX
       const touchStartX = touchTargetStart.clientX
-      const threshold = element.getBoundingClientRect().width * 0.35
+      const threshold = element.getBoundingClientRect().width * 0.3
 
       slider.removeAttribute(jumpAttribute)
       if (touchMoveX - touchStartX > threshold) {
