@@ -76,7 +76,7 @@ export default (element: HTMLElement, options: Options) => {
   const transitionTo = (i: number, shouldWait = false) => {
     const targetIndex = Math.min(Math.max(i, 0), slideCount - 1)
     isTransitioning =
-      (shouldWait && targetIndex !== slideIndex) || !!touchStartX
+      (shouldWait && targetIndex !== slideIndex) || !!touchTargetStart
     slider.style.transform = `translateX(${-targetIndex * 100 / slideCount}%)`
     slideIndex = targetIndex
   }
@@ -97,14 +97,15 @@ export default (element: HTMLElement, options: Options) => {
   }
 
   // Touch controls
-  let touchStartX: number | undefined
-  let touchMoveX: number | undefined
+  let touchTargetStart: Touch | undefined
+  let touchTargetMove: Touch | undefined
 
   const touchMove = () => {
-    if (touchStartX && touchMoveX) {
+    if (touchTargetStart && touchTargetMove) {
       slider.style.transform = `translateX(${-slideIndex *
         100 /
-        slideCount}%) translateX(${touchMoveX - touchStartX}px)`
+        slideCount}%) translateX(${touchTargetMove.clientX -
+        touchTargetStart.clientX}px)`
       window.requestAnimationFrame(touchMove)
     }
   }
@@ -112,18 +113,20 @@ export default (element: HTMLElement, options: Options) => {
   slider.addEventListener('touchstart', e => {
     if (isTransitioning) return
     slider.setAttribute(jumpAttribute, '')
-    touchStartX = touchMoveX = e.targetTouches[0].clientX
+    touchTargetStart = touchTargetMove = e.targetTouches[0]
     touchMove()
 
     module.trigger('touchstart')
   })
 
   slider.addEventListener('touchmove', e => {
-    touchMoveX = e.targetTouches[0].clientX
+    touchTargetMove = e.targetTouches[0]
   })
 
   slider.addEventListener('touchend', () => {
-    if (touchStartX && touchMoveX) {
+    if (touchTargetStart && touchTargetMove) {
+      const touchMoveX = touchTargetMove.clientX
+      const touchStartX = touchTargetStart.clientX
       const threshold = element.getBoundingClientRect().width * 0.35
 
       slider.removeAttribute(jumpAttribute)
@@ -136,7 +139,7 @@ export default (element: HTMLElement, options: Options) => {
       }
     }
 
-    touchStartX = touchMoveX = undefined
+    touchTargetStart = touchTargetMove = undefined
 
     module.trigger('touchend')
   })
