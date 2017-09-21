@@ -1,5 +1,5 @@
 import { observable, Observable } from 'riot'
-import { each, resolve, Resolvable } from '../lib/utils'
+import { resolve, Resolvable } from '../lib/utils'
 import scrollAction from '../lib/scroll-action'
 
 export interface Options {
@@ -14,19 +14,20 @@ export default (
   { viewport = () => window.innerHeight }: Options = {}
 ) => {
   const module: Observable = observable()
-  const pendingElements = new Set(elements)
+  const remainingElements = new Set(elements)
 
   scrollAction((_progress: number) => {
-    const queue: HTMLElement[] = []
     const viewportY = resolve(viewport)
+    const pendingElements = new Set()
 
-    pendingElements.forEach(element => {
+    remainingElements.forEach(element => {
       if (element.getBoundingClientRect().top < viewportY) {
-        queue.push(element)
+        pendingElements.add(element)
+        remainingElements.delete(element)
       }
     })
 
-    each(queue, element => {
+    pendingElements.forEach(element => {
       const lazyValue = element.getAttribute(lazyAttribute)
 
       element.addEventListener('load', () =>
@@ -37,11 +38,9 @@ export default (
 
       element.removeAttribute(lazyAttribute)
       element.setAttribute(loadedAttribute, '')
-
-      pendingElements.delete(element)
     })
 
-    return pendingElements.size > 0
+    return remainingElements.size > 0
   })()
 
   return module
