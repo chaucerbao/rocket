@@ -1,40 +1,48 @@
 import { observable, Observable } from 'riot'
-import scrollAction, {
-  Options as ScrollActionOptions
-} from '../lib/scroll-action'
+import { each, resolve, Resolvable } from '../lib/utils'
+import scrollAction from '../lib/scroll-action'
+
+export interface Options {
+  viewport?: Resolvable<number>
+}
 
 const lazyAttribute = 'data-lazy'
 const loadedAttribute = 'data-lazy-loaded'
 
-export default (element: HTMLElement, options: ScrollActionOptions) => {
+export default (
+  elements: HTMLElement[],
+  { viewport = () => window.innerHeight }: Options = {}
+) => {
   const module: Observable = observable()
-  const lazyValue = element.getAttribute(lazyAttribute)
+  const pendingElements = new Set(elements)
 
-  element.addEventListener('load', () =>
-    module.trigger('load', element, lazyValue)
-  )
+  scrollAction((_progress: number) => {
+    const queue: HTMLElement[] = []
+    const viewportY = resolve(viewport)
 
-  scrollAction(
-    (progress: number) => {
-      if (progress > 0) {
-        module.trigger('trigger', element, lazyValue)
-
-        element.removeAttribute(lazyAttribute)
-        element.setAttribute(loadedAttribute, '')
-
-        return false
+    pendingElements.forEach(element => {
+      if (element.getBoundingClientRect().top < viewportY) {
+        queue.push(element)
       }
+    })
 
-      return true
-    },
-    Object.assign(
-      {
-        start: () => window.pageYOffset + element.getBoundingClientRect().top,
-        viewport: () => window.innerHeight
-      },
-      options
-    )
-  )()
+    each(queue, element => {
+      const lazyValue = element.getAttribute(lazyAttribute)
+
+      element.addEventListener('load', () =>
+        module.trigger('load', element, lazyValue)
+      )
+
+      module.trigger('trigger', element, lazyValue)
+
+      element.removeAttribute(lazyAttribute)
+      element.setAttribute(loadedAttribute, '')
+
+      pendingElements.delete(element)
+    })
+
+    return pendingElements.size > 0
+  })()
 
   return module
 }

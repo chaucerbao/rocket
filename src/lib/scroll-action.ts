@@ -8,7 +8,11 @@ export interface Options {
 
 export default (
   callback: (progress: number) => boolean,
-  { start = 0, end = () => document.body.clientHeight, viewport = 0 }: Options
+  {
+    start = 0,
+    end = () => document.body.clientHeight,
+    viewport = 0
+  }: Options = {}
 ) => {
   const calculateFrame = () => {
     const startY = resolve(start)

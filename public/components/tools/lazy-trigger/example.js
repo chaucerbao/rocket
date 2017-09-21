@@ -4,7 +4,7 @@ import lazyTrigger from '../../../../src/lazy-trigger'
 // Example
 import { $ } from '../../../../src/lib/dom'
 
-const lazyHandler = lazyTrigger($('[data-lazy]'), {
+const lazyHandler = lazyTrigger([$('[data-lazy]')], {
   viewport: () => window.innerHeight * 0.75
 })
 
