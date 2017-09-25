@@ -21,7 +21,7 @@ export default (
     const pendingElements = new Set()
 
     remainingElements.forEach(element => {
-      if (element.getBoundingClientRect().top < viewportY) {
+      if (element.getBoundingClientRect().top <= viewportY) {
         pendingElements.add(element)
         remainingElements.delete(element)
       }
